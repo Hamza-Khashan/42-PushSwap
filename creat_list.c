@@ -6,13 +6,13 @@
 /*   By: hkhashan <hkhashan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 14:18:28 by hkhashan          #+#    #+#             */
-/*   Updated: 2026/11/02 17:12:17 by hkhashan         ###   ########.fr       */
+/*   Updated: 2026/11/11 20:41:46 by hkhashan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_list	*ft_lstnew(void *content)
+t_list	*ft_lstnew(int content)
 {
 	t_list	*new_node;
 
@@ -22,6 +22,23 @@ t_list	*ft_lstnew(void *content)
 	new_node->content = content;
 	new_node->next = NULL;
 	return (new_node);
+}
+
+void	ft_lstadd_back(t_list **lst, t_list *new)
+{
+	t_list	*last;
+
+	if (!lst || !new)
+		return ;
+	if (!*lst)
+	{
+		*lst = new;
+		return ;
+	}
+	last = *lst;
+	while (last->next)
+		last = last->next;
+	last->next = new;
 }
 
 void	push(t_list **lst, t_list *new)
@@ -36,11 +53,10 @@ void	pop(t_list **lst)
 {
 	t_list	*temp;
 
-	if (!(*lst))
+	if (!lst || !*lst)
 		return ;
 	temp = (*lst);
 	(*lst) = (*lst)->next;
-	free((temp)->content);
 	free(temp);
 }
 
@@ -63,6 +79,8 @@ void	rotate(t_list **lst)
 	t_list	*last_node;
 	t_list	*first_node;
 
+	if (!lst || !*lst || !(*lst)->next)
+		return ;
 	last_node = *lst;
 	first_node = *lst;
 	while (last_node->next != NULL)
@@ -77,12 +95,13 @@ void	rev_rotate(t_list **lst)
 	t_list	*last_node;
 	t_list	*prev_last;
 
-	last_node = *lst;
+	if (!lst || !*lst || !(*lst)->next)
+		return ;
 	prev_last = *lst;
 	while (prev_last->next->next != NULL)
 		prev_last = prev_last->next;
 	last_node = prev_last->next;
-	last_node->next = (*lst);
 	prev_last->next = NULL;
-	(*lst) = last_node;
+	last_node->next = *lst;
+	*lst = last_node;
 }
