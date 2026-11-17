@@ -6,7 +6,7 @@
 /*   By: hkhashan <hkhashan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 14:18:28 by hkhashan          #+#    #+#             */
-/*   Updated: 2026/11/11 20:41:46 by hkhashan         ###   ########.fr       */
+/*   Updated: 2026/11/17 14:47:32 by hkhashan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,17 @@ void	rev_rotate(t_list **lst)
 	prev_last->next = NULL;
 	last_node->next = *lst;
 	*lst = last_node;
+}
+
+int	ft_lstsize(t_list *lst)
+{
+	int count;
+
+	count = 0;
+	while (lst != NULL)
+	{
+		lst = lst->next;
+		count++;
+	}
+	return (count);
 }

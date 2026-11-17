@@ -6,7 +6,7 @@
 /*   By: hkhashan <hkhashan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 14:08:37 by hkhashan          #+#    #+#             */
-/*   Updated: 2026/11/13 17:26:35 by hkhashan         ###   ########.fr       */
+/*   Updated: 2026/11/17 14:58:46 by hkhashan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,9 @@ int	main(int argc, char **argv)
 	temp = stack_a;
 	disorder = compute_disorder(temp);
 	temp = stack_a;
+	print_stack(temp, 'a');
+	temp = stack_a;
+	bubble_sort(&temp);
 	print_stack(temp, 'a');
 	free_stack(&stack_a);
 	printf("disorder: %f", disorder);
