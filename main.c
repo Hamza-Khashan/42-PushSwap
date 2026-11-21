@@ -6,11 +6,35 @@
 /*   By: hkhashan <hkhashan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 14:08:37 by hkhashan          #+#    #+#             */
-/*   Updated: 2026/11/17 14:58:46 by hkhashan         ###   ########.fr       */
+/*   Updated: 2026/11/21 15:31:30 by hkhashan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+static void	init_data(t_data *data)
+{
+	data->a = NULL;
+	data->b = NULL;
+	data->size_a = 0;
+	data->size_b = 0;
+	data->bench.enabled = 0;
+	data->bench.mode = STRAT_ADAPTIVE;
+	data->bench.complexity = C_SIMPLE;
+	data->bench.disorder = 0.0;
+	data->bench.total_ops = 0;
+	data->bench.sa = 0;
+	data->bench.sb = 0;
+	data->bench.ss = 0;
+	data->bench.pa = 0;
+	data->bench.pb = 0;
+	data->bench.ra = 0;
+	data->bench.rb = 0;
+	data->bench.rr = 0;
+	data->bench.rra = 0;
+	data->bench.rrb = 0;
+	data->bench.rrr = 0;
+}
 
 int	ft_atoi(const char *nptr, int *error)
 {
@@ -83,18 +107,7 @@ int	has_duplicate(t_list *stack, int num)
 	return (0);
 }
 
-void	print_stack(t_list *stack, char name)
-{
-	printf("Stack %c: ", name);
-	while (stack)
-	{
-		printf("%d ", stack->content);
-		stack = stack->next;
-	}
-	printf("\n");
-}
-
-void	create_list(char **args, t_list **stack, int i, int *error)
+static void	create_list(char **args, t_data *data, int i, int *error)
 {
 	int		val;
 	t_list	*node;
@@ -107,7 +120,7 @@ void	create_list(char **args, t_list **stack, int i, int *error)
 	while (args[i])
 	{
 		val = ft_atoi(args[i], error);
-		if (*error || has_duplicate(*stack, val))
+		if (*error || has_duplicate(data->a, val))
 		{
 			*error = 1;
 			return ;
@@ -118,7 +131,8 @@ void	create_list(char **args, t_list **stack, int i, int *error)
 			*error = 1;
 			return ;
 		}
-		ft_lstadd_back(stack, node);
+		ft_lstadd_back(&data->a, node);
+		data->size_a++;
 		i++;
 	}
 }
@@ -143,43 +157,46 @@ double	compute_disorder(t_list *stack)
 		}
 		stack = stack->next;
 	}
+	if (total_pairs == 0)
+		return (0.0);
 	return (mistakes / total_pairs);
 }
 
 int	main(int argc, char **argv)
 {
-	t_list	*stack_a;
+	t_data	data;
 	t_list	*temp;
 	char	**arr;
 	int		error;
-	double	disorder;
 
 	if (argc < 2)
 		return (0);
-	stack_a = NULL;
+	init_data(&data);
 	arr = NULL;
 	error = 0;
 	if (argc == 2)
 	{
 		arr = ft_split(argv[1], ' ');
-		create_list(arr, &stack_a, 0, &error);
+		create_list(arr, &data, 0, &error);
+		free_split(arr);
 	}
 	else
-		create_list(argv, &stack_a, 1, &error);
+		create_list(argv, &data, 1, &error);
 	if (error)
 	{
-		free_stack(&stack_a);
+		free_stack(&data.a);
 		write(2, "Error\n", 6);
 		return (1);
 	}
-	temp = stack_a;
-	disorder = compute_disorder(temp);
-	temp = stack_a;
-	print_stack(temp, 'a');
-	temp = stack_a;
-	bubble_sort(&temp);
-	print_stack(temp, 'a');
-	free_stack(&stack_a);
-	printf("disorder: %f", disorder);
+	data.bench.disorder = compute_disorder(data.a);
+	simple_sort(&data);
+	temp = data.a;
+	while (temp)
+	{
+		printf("%d ", temp->content);
+		temp = temp->next;
+	}
+	free_stack(&data.a);
+	free_stack(&data.b);
 	return (0);
 }

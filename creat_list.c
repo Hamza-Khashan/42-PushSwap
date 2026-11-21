@@ -6,7 +6,7 @@
 /*   By: hkhashan <hkhashan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 14:18:28 by hkhashan          #+#    #+#             */
-/*   Updated: 2026/11/17 14:47:32 by hkhashan         ###   ########.fr       */
+/*   Updated: 2026/11/20 21:01:43 by hkhashan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,6 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	while (last->next)
 		last = last->next;
 	last->next = new;
-}
-
-void	push(t_list **lst, t_list *new)
-{
-	if (!lst || !new)
-		return ;
-	new->next = *lst;
-	*lst = new;
-}
-
-void	pop(t_list **lst)
-{
-	t_list	*temp;
-
-	if (!lst || !*lst)
-		return ;
-	temp = (*lst);
-	(*lst) = (*lst)->next;
-	free(temp);
 }
 
 void	swap(t_list **lst)
@@ -108,7 +89,7 @@ void	rev_rotate(t_list **lst)
 
 int	ft_lstsize(t_list *lst)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (lst != NULL)
